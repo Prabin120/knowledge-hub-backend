@@ -1,0 +1,25 @@
+[project]
+name = "uv-fastapi-example"
+version = "0.1.0"
+description = "FastAPI project"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles>=24.1.0",
+    "chromadb>=1.0.13",
+    "fastapi[standard]",
+    "langchain>=0.3.26",
+    "langchain-community>=0.3.26",
+    "langchain-google-genai>=2.1.5",
+    "lazy-model>=0.3.0",
+    "llama-cpp-python",
+    "motor>=3.7.1",
+    "numpy>=2.3.1",
+    "overrides>=7.7.0",
+    "pillow>=11.2.1",
+    "pydantic>=2.11.7",
+    "pymongo>=4.13.2",
+    "pytesseract>=0.3.13",
+    "python-dotenv>=1.1.1",
+    "uvicorn[standard]>=0.35.0",
+]

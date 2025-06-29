@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+langchain
+chromadb
+langchain-google-genai
+pytesseract
+langchain-community
+beanie
+pymongo
+motor
+aiofiles
+pillow
+python-dotenv
+pydantic

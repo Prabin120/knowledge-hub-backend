@@ -1,0 +1,47 @@
+from langchain.vectorstores import FAISS
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.llms import LlamaCpp
+from langchain.chains import RetrievalQA
+from langchain.document_loaders import TextLoader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.docstore.document import Document
+
+# Step 1: Load and Split Documents
+docs = [
+    Document(page_content="Error: npm ERR! code ENOENT – missing package.json"),
+    Document(page_content="Fix Docker permission denied by adding user to docker group."),
+    Document(page_content="To fix 'address already in use', kill the process on that port."),
+]
+
+# Step 2: Set up Embedding Model
+embedding_model = HuggingFaceEmbeddings(
+    model_name="BAAI/bge-small-en",
+    model_kwargs={"device": "cpu"},  # change to 'cuda' if you use GPU
+    encode_kwargs={"normalize_embeddings": True}
+)
+
+# Step 3: Vector Store (FAISS)
+db = FAISS.from_documents(docs, embedding_model)
+
+# Step 4: Set up LLM (LlamaCpp with GGUF)
+llm = LlamaCpp(
+    model_path="./models/mistral/mistral-7b-instruct.Q4_K_M.gguf",
+    temperature=0.7,
+    max_tokens=512,
+    top_p=0.95,
+    n_ctx=2048,
+    verbose=True
+)
+
+# Step 5: Retrieval-based QA chain
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    retriever=db.as_retriever(search_kwargs={"k": 2}),
+    return_source_documents=True
+)
+
+# Step 6: Ask a question
+query = "How to fix Docker permission error?"
+result = qa.run(query)
+
+print("Answer:", result)
